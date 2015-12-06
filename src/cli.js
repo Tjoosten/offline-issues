@@ -1,10 +1,28 @@
 #!/usr/bin/env node
 
 var ghauth = require('ghauth')
-var minimist = require('minimist')
 var getIssues = require('./index.js')
 
-var options = minimist(process.argv.slice(2))
+var options = require('yargs')
+  .usage('Usage: $0 [options] [repository ...]')
+  .option('html', {
+    alias: 'h',
+    describe: 'If no repository given, generate HTML from existing offline cache',
+    boolean: true
+  })
+  .option('no-static', {
+    alias: 'S',
+    describe: "Don't generate static files for HTML format",
+    boolean: true
+  })
+  .option('state', {
+    alias: 's',
+    describe: 'Filter by issue state',
+    choices: ['open', 'closed', 'all'],
+    default: 'open'
+  })
+  .help('help')
+  .argv
 
 var ghAuthOptions = {
  // ~/.config/[configName].json will store the token
